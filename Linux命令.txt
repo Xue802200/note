@@ -1,0 +1,67 @@
+![image-20250124201825555](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250124201825555.png)
+
+查看git的配置信息：git config -l
+
+查看git的系统配置信息 git config --system --list
+
+查看git的全局配置   git config --global --list
+
+![image-20250124213525494](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250124213525494.png)
+
+![image-20250124213830456](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250124213830456.png)
+
+
+
+
+
+先git add . 添加
+
+再git status 查看状态
+
+最后git commit -m "注释内容" 提交 
+
+
+
+![image-20250124221811601](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250124221811601.png)
+
+![image-20250125164752445](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250125164752445.png)
+
+git reset --hard 序列号  回溯到指定的版本
+
+git reset  取消缓存
+
+
+
+# 远程仓库
+
+![image-20250125170713573](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250125170713573.png)
+
+## 查看远程仓库
+
+git remote                 git remote -v   查看远程仓库的详细信息
+
+## 添加远程仓库
+
+git remote add <shortname> <url>
+
+## 推送到远程仓库
+
+git push short-name branch-name
+
+## 远程仓库拉取
+
+git pull short-name branch-name
+
+ps:如果本地仓库不是从远程仓库克隆的，而是本地创建的仓库，并且仓库中存在文件，此时再从远程仓库拉去文件的时候会报错
+
+解决此问题可以在git pull命令后加入参数 --allow-unrelated-histories
+
+# 分支操作
+
+常用命令
+
+![image-20250125180123440](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250125180123440.png)
+
+### 查看分支
+
+git branch 查看分支     git branch -r  列出所有远程分支   git branch -a 列出所有本地分支和远程分支
