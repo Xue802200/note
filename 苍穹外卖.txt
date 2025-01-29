@@ -3,3 +3,114 @@
 后端：![image-20250123204132609](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250123204132609.png)
 
 ![image-20250123204810406](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250123204810406.png)
+
+# day01
+
+接受参数可以用用DTO类去接受
+
+controller层方法的返回值都是VO形式的，并且用Reuslt类进行封装
+
+在xml中的配置项统一封装成配置属性类，再用autowired进行依赖注入
+
+
+
+前端发送的请求其实就是对于tomcat服务器中的某一个接口进行请求
+
+![image-20250129121911621](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250129121911621.png)
+
+为什么前端发送秦请求的网址和controller层中方法设置的地址不一样   原因？
+
+## nginx——反向代理
+
+nginx反向代理技术，就是将前端发送的动态请求由nginx转发到后端服务器  原因？
+
+1.提高访问速度 ——前端请求不直接访问后端服务器，而且首先经过nginx再访问后端服务器
+
+2.进行负载均衡——把大量的请求按照我们指定的方式均衡的分配给集群中的每台服务器
+
+3，保证后端服务安全——外部用户只能访问nginx，并不知道后端服务器的IP地址，因此可以避免攻击
+
+### 反向代理的配置
+
+![image-20250129124718071](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250129124718071.png)
+
+表示路径为location/api...的请求可以去访问http://localhost:8080/admin/...的后端路径
+
+### 负载均衡的配置
+
+![image-20250129124938741](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250129124938741.png)
+
+![image-20250129125503559](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250129125503559.png)
+
+跟反向代理的配置最主要的区别是在于webservers，在webservers后的两个端口号后可以添加负载策略
+
+### 登录功能的完善——对密码进行加密处理
+
+保证密码不被其他人所盗取而采用的加密技术
+
+TODO：idea中的标签，用于提醒此处还有地方需要整改，可后续在idea中查看整个项目的TODO位置，便于后续代码的修改
+
+DigestUtils类的方法可以将指定的属性值进行md5加密算法处理，参数要求为getBytes格式
+
+### 接口文档的导入     Swagger
+
+#### 介绍和使用方式
+
+导入这里用apifox
+
+Swagger——Kinfe4j  是为Java MVC框架集成Swagger生成Api文档的增强解决方案
+
+1.导入Knife4j的maven坐标
+
+```Java
+<dependency>
+    <groupld>com.github.xiaoymin</groupld>
+    <artifactld>knife4j-spring-boot-starter</artifactld>
+    <version>3.0.2</version>
+</dependency>
+```
+
+2.在配置类中加入knife4j相关配置
+
+```Java
+@Bean
+public Docket docket() {
+    ApiInfo apiInfo = new ApiInfoBuilder()
+            .title("苍穹外卖项目接口文档")
+            .version("2.0")
+            .description("苍穹外卖项目接口文档")
+            .build();
+    Docket docket = new Docket(DocumentationType.SWAGGER_2)
+            .apiInfo(apiInfo)
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+            .paths(PathSelectors.any())
+            .build();
+    return docket;
+}
+```
+
+3。设置静态资源映射，否则接口文档页面无法访问
+
+```java
+/**
+ * 设置静态资源映射
+ * @param registry
+ */
+protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
+    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+}
+```
+
+#### 常用注解
+
+![image-20250129150616874](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250129150616874.png)
+
+```Java
+@Api(tags = "员工相关接口")
+@ApiModel(description = "员工登录时传递的数据模型")
+@ApiModelProperty("用户名")
+@ApiOperation(value = "员工登录")
+```
+
