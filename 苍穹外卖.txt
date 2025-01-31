@@ -114,3 +114,68 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 @ApiOperation(value = "员工登录")
 ```
 
+# day02
+
+## 新增员工
+
+### 代码开发
+
+根据新增员工接口设计对应的DTO：  ![image-20250130154307816](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250130154307816.png)
+
+ps：当前端提交的数据和实体类中对应的属性差别比较大时，建议使用DTO来封装数据
+
+### 代码完善
+
+#### 1.添加重复数据的时候会报错
+
+1.添加重复数据的时候会有SQLIntegrityConstraintViolationException的异常 ，会显示Duplicate entry 'zhangsan' for key 'employee.idx_username'的报错信息
+
+2.在全局异常处理器GlobalExceptionHandler中添加一个方法，方法形参为SQLIntegrityConstraintViolationException
+
+3.判断报错信息是否有Duplicate entry，有的话则说明是重复添加的报错，没有则说明是未知错误
+
+4.根据getMessage获取报错信息，再根据split方法获取重复添加的用户名返回给前端
+
+#### 2.操作人和修改人的ID固定
+
+![image-20250130223404020](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250130223404020.png)
+
+ThreadLocal并不是一个Thread，而是Thread的局部变量
+
+ThreadLocal为每个线程单独提供一份存储空间，具有线程隔离的效果，只有在线程内才能获取到对应的值，线程外则不能访问。
+
+ThreadLocal常用方法：
+
+public void set(T value)   设置当前线程的线程局部变量的值
+
+public T get()                    返回当前线程所对应的线程局部变量的值
+
+public void remove()         移除当前线程的线程局部变量
+
+## 分页查询
+
+### 代码开发
+
+1.在contoller层编写对应的代码，保证url路径和请求格式一致，返回的放回类型应该为Result<PageResult>，方法的行参为EmployeePageQueryDTO，表示进行分页查询时对应的DTO，在方法体内要调用service的相关方法，进行分页查询
+
+![image-20250131161853332](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250131161853332.png)
+
+2.service层，在service层的接口新增方法employService，并在实现类进行实现，方法的形参也为在EmployeePageQueryDTO。代码的第一行要调用PageHelper.startPage()方法进行初始设置，传递page和pageSize，底层会自动写sql语句。然后调用Mapper层的pageQuery()方法，用Page<Employee>,这里的Page是PageHelper中特有的。
+
+![image-20250131162620071](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250131162620071.png)
+
+3.mapper层
+
+resultType指的是返回结果，如果是list集合的话，则是集合中的单个数据的全地址
+
+![image-20250131162736603](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250131162736603.png)
+
+### 代码完善
+
+问题：日期在前端的渲染不美观
+
+![image-20250131162913780](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250131162913780.png)
+
+解决方案：
+
+![image-20250131162956813](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250131162956813.png)
