@@ -179,3 +179,41 @@ resultType指的是返回结果，如果是list集合的话，则是集合中的
 解决方案：
 
 ![image-20250131162956813](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250131162956813.png)
+
+```Java
+/**
+ * 扩展Spring MVC框架消息转化器
+ * @param converters
+ */
+protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    log.info("扩展消息转化器...");
+    //创建一个消息转化器对象、
+    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+
+    //需要为消息转化器添加一个对象转化器，对象转化器可以将Java对象序列化为json数据
+    converter.setObjectMapper(new JacksonObjectMapper());
+
+    //将自己的对象转化器添加到容器当中
+    converters.add(0,converter);
+}
+```
+
+## 启用，禁用员工账号
+
+注意：在service层调用mapper层的方法时，可以创建一个方法名叫update，将所有的字段都考虑进去并进行修改，采用动态sql的方式，后面如果需要编辑员工的话，则可以直接调用这个方法不需要自己重新去写
+
+## 编辑员工信息
+
+## 导入分类功能管理模块
+
+![image-20250201203257059](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250201203257059.png)
+
+# day03
+
+## 公共字段自动填充
+
+问题：![image-20250201222457884](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250201222457884.png)
+
+实现思路：AOP，自定义注解标识有哪些方法需要进行操作
+
+![image-20250201222822202](C:\Users\simple\AppData\Roaming\Typora\typora-user-images\image-20250201222822202.png)
